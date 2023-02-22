@@ -10,7 +10,7 @@ import minimist from 'minimist'
 // 用于node执行shell
 import shell from 'shelljs'
 
-import { cloneProject, mainRepoUrl, getTemplate } from './template.js'
+import { cloneProject, mainRepoUrl, getTemplateName } from './template.js'
 
 const createProject = (templateKey, projectName) => {
   // 多仓库多模板拉取
@@ -19,7 +19,7 @@ const createProject = (templateKey, projectName) => {
   }
 
   // 单仓库多模板拉取
-  // const templateName = getTemplate(templateKey);
+  // const templateName = getTemplateName(templateKey);
   // shell.exec('git init')
   // shell.exec('git config core.sparsecheckout true')
   // shell.exec(`echo '${templateName}' >> .git/info/sparse-checkout`)
