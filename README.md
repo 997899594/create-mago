@@ -1,3 +1,3 @@
-# create-safeis-skit
+# create-mago
 
-safeis前端项目脚手架
+前端项目脚手架
