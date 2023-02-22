@@ -1,21 +1,21 @@
 #!/usr/bin/env node
 
-import * as fs from 'node:fs';
+import * as fs from 'node:fs'
 // 用于创建交互提示
-import prompts from 'prompts';
+import prompts from 'prompts'
 // 用于设置输入输出颜色
-import { reset, red } from 'kolorist';
+import { reset, red } from 'kolorist'
 // 用于接受用户命令参数
-import minimist from 'minimist';
+import minimist from 'minimist'
 // 用于node执行shell
-import shell from 'shelljs';
+import shell from 'shelljs'
 
-import { cloneProject, mainRepoUrl, getTemplate } from './template.js';
+import { cloneProject, mainRepoUrl, getTemplate } from './template.js'
 
 const createProject = (templateKey, projectName) => {
   // 多仓库多模板拉取
   if (shell.exec(`${cloneProject(templateKey, projectName)}`).code === 0) {
-    shell.exec(`rm -rf ${finalAnswer.projectName}/.git`);
+    shell.exec(`rm -rf ${finalAnswer.projectName}/.git`)
   }
 
   // 单仓库多模板拉取
@@ -28,7 +28,7 @@ const createProject = (templateKey, projectName) => {
   //   shell.exec(`mv ${templateName} ${projectName}`);
   //   shell.exec('rm -rf .git');
   // }
-};
+}
 
 const formatProjectName = (projectName = defaultTargetDir) => {
   return projectName
@@ -36,24 +36,24 @@ const formatProjectName = (projectName = defaultTargetDir) => {
     .toLowerCase()
     .replace(/\s+/g, '-')
     .replace(/^[._]/, '')
-    .replace(/[^a-z0-9-~]+/g, '-');
-};
+    .replace(/[^a-z0-9-~]+/g, '-')
+}
 const handleAnswer = (answer) => {
   return {
     ...answer,
     projectName: formatProjectName(answer.projectName)
-  };
-};
+  }
+}
 
 if (!shell.which('git')) {
-  shell.echo(red('🧎Sorry, this script requires git !!'));
-  shell.exit(1);
+  shell.echo(red('🧎Sorry, this script requires git !!'))
+  shell.exit(1)
 }
 // 默认的项目名（目录名）
-const defaultTargetDir = 'safeis-project';
+const defaultTargetDir = 'safeis-project'
 
-const argv = minimist(process.argv.slice(2), {});
-const [projectNameParams] = argv._;
+const argv = minimist(process.argv.slice(2), {})
+const [projectNameParams] = argv._
 const answer = await prompts([
   {
     type: projectNameParams ? null : 'text',
@@ -65,8 +65,8 @@ const answer = await prompts([
     name: 'isExists',
     type: (prev) => {
       if (fs.existsSync(`${process.cwd()}/${prev}`)) {
-        shell.echo(red(`The destination directory "${prev}" already exists !!Please delete the directory and try again`));
-        shell.exit(1);
+        shell.echo(red(`The destination directory "${prev}" already exists !!Please delete the directory and try again`))
+        shell.exit(1)
       }
     }
   },
@@ -92,14 +92,14 @@ const answer = await prompts([
       { title: 'React', value: 'React' }
     ]
   }
-]);
+])
 
 if (projectNameParams) {
-  Object.assign(answer, { projectName: projectNameParams });
+  Object.assign(answer, { projectName: projectNameParams })
 }
-const finalAnswer = handleAnswer(answer);
-const { projectName, platform, framework } = finalAnswer;
+const finalAnswer = handleAnswer(answer)
+const { projectName, platform, framework } = finalAnswer
 if (projectName && platform && framework) {
-  const templateKey = `${platform.toLowerCase()}-${framework.toLowerCase()}`;
-  createProject(templateKey, projectName);
+  const templateKey = `${platform.toLowerCase()}-${framework.toLowerCase()}`
+  createProject(templateKey, projectName)
 }
